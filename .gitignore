@@ -1,0 +1,7 @@
+venv/
+data/
+.DS_Store
+*.ipynb_checkpoints
+reports/baseline_scatter.png
+reports/baseline_timeseries.png
+__pycache__/

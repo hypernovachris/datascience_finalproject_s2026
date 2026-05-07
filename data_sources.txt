@@ -1,0 +1,6 @@
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/machine_meta.tar.gz
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/machine_usage.tar.gz
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/batch_instance.tar.gz
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/container_meta.tar.gz
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/container_usage.tar.gz
+http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/batch_task.tar.gz
