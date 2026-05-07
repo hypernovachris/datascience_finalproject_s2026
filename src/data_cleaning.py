@@ -60,4 +60,4 @@ def preprocess_alibaba_data(input_file, output_folder):
 
 if __name__ == "__main__":
     # Update this to your local filename
-    preprocess_alibaba_data("data/processed/sample_machine_usage.csv", "data/processed")
+    preprocess_alibaba_data(Path("data") / "processed" / "sample_machine_usage.csv", Path("data") / "processed")

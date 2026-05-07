@@ -1,5 +1,5 @@
 import pandas as pd
-import os
+from pathlib import Path
 import matplotlib.pyplot as plt
 
 
@@ -41,11 +41,11 @@ def load_full_data_optimized(file_path):
     return df
 
 if __name__ == "__main__":
-    raw_data_path = "../data/raw/machine_usage.csv"
+    raw_data_path = Path("..") / "data" / "raw" / "machine_usage.csv"
     
     # Adjust path if script is run from project root
-    if not os.path.exists(raw_data_path):
-        raw_data_path = "data/raw/machine_usage.csv"
+    if not raw_data_path.exists():
+        raw_data_path = Path("data") / "raw" / "machine_usage.csv"
     
     df_full = load_full_data_optimized(raw_data_path)
 
@@ -73,7 +73,8 @@ if __name__ == "__main__":
     df_sample["cpu_util_percent"] = df_sample["cpu_util_percent"] / 100.0
 
     # Save the sample dataset to a new CSV file
-    sample_data_path = "data/processed/sample_machine_usage.csv"
+    sample_data_path = Path("data") / "processed" / "sample_machine_usage.csv"
+    sample_data_path.parent.mkdir(parents=True, exist_ok=True)
     df_sample.to_csv(sample_data_path, index=False)
     print(f"Sample dataset saved to {sample_data_path}")
 

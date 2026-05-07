@@ -69,8 +69,16 @@ def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=
 
     # 3. Optimizer
     # AdamW is robust for diffusion/consistency models
-    optimizer = optim.AdamW(online_model.parameters(), lr=1e-3, weight_decay=1e-4)
+    optimizer = optim.AdamW(online_model.parameters(), lr=1e-4, weight_decay=1e-4)
 
+    # Initialize the AMP GradScaler
+    # We conditionally enable it only if we are using an NVIDIA GPU (CUDA)
+    # This ensures the code won't crash when you test it on your Mac!
+    use_amp = device.type == 'cuda'
+    scaler = torch.amp.GradScaler(device='cuda', enabled=use_amp)
+
+    # 4. Training Loop
+    print("\nStarting Training...")
     # 4. Training Loop
     print("\nStarting Training...")
     for epoch in range(epochs):
@@ -88,20 +96,30 @@ def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=
             t_n_plus_1 = t_n + 0.05 
             
             # Generate random gaussian noise
-            noise_n = torch.randn_like(x_0) * t_n.view(-1, 1, 1)
-            noise_n_plus_1 = torch.randn_like(x_0) * t_n_plus_1.view(-1, 1, 1)
+            noise_n = (torch.randn_like(x_0) * 0.5) * t_n.view(-1, 1, 1)
+            noise_n_plus_1 = (torch.randn_like(x_0) * 0.5) * t_n_plus_1.view(-1, 1, 1)
 
             # Forward Pass & Consistency Loss Calculation
             optimizer.zero_grad()
-            c_loss = consistency_loss(
-                online_model, target_model, 
-                x_0, t_n, t_n_plus_1, noise_n, noise_n_plus_1
-            )
+            
+            # Wrap the forward pass in autocast
+            with torch.amp.autocast(device_type=device.type, enabled=use_amp):
+                c_loss = consistency_loss(
+                    online_model, target_model, 
+                    x_0, t_n, t_n_plus_1, noise_n, noise_n_plus_1
+                )
 
-            # Backpropagation
-            c_loss.backward()
+            # Backpropagation using the Scaler
+            scaler.scale(c_loss).backward()
+            
+            # CRITICAL: You must unscale the gradients BEFORE clipping them!
+            # Otherwise, you are clipping the artificially scaled-up gradients.
+            scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(online_model.parameters(), max_norm=1.0)
-            optimizer.step()
+            
+            # Step the optimizer and update the scaler for the next batch
+            scaler.step(optimizer)
+            scaler.update()
 
             # Update Target Model via EMA
             update_ema_target(online_model, target_model)

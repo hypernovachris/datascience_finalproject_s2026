@@ -1,5 +1,5 @@
 import pandas as pd
-import os
+from pathlib import Path
 import matplotlib.pyplot as plt
 
 
@@ -15,7 +15,7 @@ def load_full_data_optimized(file_path):
 
 
 if __name__ == "__main__":
-    raw_data_path = "data/processed/sample_machine_usage.csv"
+    raw_data_path = Path("data") / "processed" / "sample_machine_usage.csv"
     
     df_full = load_full_data_optimized(raw_data_path)
 
