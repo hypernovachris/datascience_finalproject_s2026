@@ -12,7 +12,7 @@ from models.dataset import AlibabaSegmentDataset
 from models.consistency_model import CMTSBackbone
 from train_advanced import asymmetric_business_metric
 
-def evaluate_cmts(data_dir, model_path, sequence_length=5):
+def evaluate_cmts(data_dir, model_path, sequence_length=25):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.backends.mps.is_available():
         device = torch.device("mps")
@@ -112,5 +112,5 @@ if __name__ == "__main__":
     evaluate_cmts(
         data_dir="data/processed", 
         model_path="models/cmts_online_weights.pth",
-        sequence_length=5
+        sequence_length=25
     )

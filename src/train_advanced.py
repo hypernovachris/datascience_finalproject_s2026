@@ -47,7 +47,7 @@ def asymmetric_business_metric(y_true, y_pred, penalty_weight=5.0):
 # ---------------------------------------------------------
 # 3. Main Training Loop
 # ---------------------------------------------------------
-def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=5):
+def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=25):
     # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.backends.mps.is_available():
@@ -146,4 +146,4 @@ def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=
 
 if __name__ == "__main__":
     # Ensure this points to the directory containing train_segments.csv
-    train_consistency_model(data_dir="data/processed", epochs=10, batch_size=64, sequence_length=5)
+    train_consistency_model(data_dir="data/processed", epochs=10, batch_size=64, sequence_length=25)

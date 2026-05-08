@@ -9,7 +9,7 @@ class AlibabaSegmentDataset(Dataset):
     Custom PyTorch Dataset for segmented Alibaba CPU telemetry.
     Generates sequence windows for the Consistency Model without crossing segment boundaries.
     """
-    def __init__(self, csv_file, sequence_length=5, feature_col='cpu_scaled'):
+    def __init__(self, csv_file, sequence_length=25, feature_col='cpu_scaled'):
         """
         Args:
             csv_file (str or Path): Path to the processed train/test CSV.
@@ -40,7 +40,7 @@ class AlibabaSegmentDataset(Dataset):
                 continue
                 
             # Create valid sliding windows for this specific segment
-            # e.g., for sequence_length=5, valid starts are 0 to (len - 5)
+            # e.g., for sequence_length=25, valid starts are 0 to (len - 5)
             for i in range(len(values) - sequence_length + 1):
                 window = values[i : i + sequence_length]
                 self.samples.append(window)
