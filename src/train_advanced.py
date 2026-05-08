@@ -57,7 +57,7 @@ def train_consistency_model(data_dir, epochs=10, batch_size=64, sequence_length=
     # 1. Initialize Data
     train_path = Path(data_dir) / "train_segments.csv"
     train_dataset = AlibabaSegmentDataset(train_path, sequence_length=sequence_length)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=4, pin_memory=True)
 
     # 2. Initialize Models
     # Features = 1 (CPU load)

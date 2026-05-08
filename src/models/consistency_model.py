@@ -42,6 +42,9 @@ class ResidualConv1DBlock(nn.Module):
         self.conv1 = nn.Conv1d(in_channels, out_channels, kernel_size=3, 
                                padding=dilation, dilation=dilation)
         self.norm1 = nn.GroupNorm(8, out_channels)
+
+        # dropout layer
+        self.dropout = nn.Dropout(0.1)
         
         # Second convolution
         self.conv2 = nn.Conv1d(out_channels, out_channels, kernel_size=3, 
