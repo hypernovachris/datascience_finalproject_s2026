@@ -2,7 +2,6 @@ import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-
 # Define columns based on the documentation
 COLUMNS = [
     "machine_id", "time_stamp", "cpu_util_percent", "mem_util_percent",
@@ -59,8 +58,8 @@ if __name__ == "__main__":
     print("Summary Statistics for cpu_util_percent records per machine:")
     print(cpu_util_counts.describe())
 
-    # Select 50 random machine IDs for the sample dataset
-    sample_machine_ids = pd.Series(unique_machine_ids).sample(n=50, random_state=42).tolist()
+    # Select 5 random machine IDs for the sample dataset
+    sample_machine_ids = pd.Series(unique_machine_ids).sample(n=5, random_state=42).tolist()
     print(f"Selected Sample Machine IDs: {sample_machine_ids}")
 
     # Filter the full dataset to create the sample dataset with only the selected machine IDs, timestamps, and cpu_util_percent

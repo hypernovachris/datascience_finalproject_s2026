@@ -41,10 +41,10 @@ def evaluate_cmts(data_dir, model_path, sequence_length=25):
 
             # In consistency models, inference starts from pure noise at maximum t
             t_max = torch.ones(current_batch_size, device=device) * 0.9 
-            pure_noise = (torch.randn_like(x_0) * 0.5) * t_max.view(-1, 1, 1)
+            noisy_input = x_0 + (torch.randn_like(x_0) * t_max.view(-1, 1, 1))
 
             # 1-step mapping from noise to clean data
-            pred_x_0 = model(pure_noise, t_max)
+            pred_x_0 = model(noisy_input, t_max)
 
             # We only care about predicting the *last* step in the sequence window
             # to align with our baseline forecasting approach

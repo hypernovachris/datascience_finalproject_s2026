@@ -6,5 +6,5 @@ data/
 reports/baseline_scatter.png
 reports/baseline_timeseries.png
 __pycache__/
-cmts_timeseries.png
-cmts_residuals.png
+*.png
+*.pth

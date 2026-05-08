@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
 def preprocess_alibaba_data(input_file, output_folder):
     # Use Path for Mac/Windows compatibility
@@ -35,8 +35,8 @@ def preprocess_alibaba_data(input_file, output_folder):
     keep_ids = counts[counts >= min_length].index
     df = df[df['logical_id'].isin(keep_ids)].copy()
 
-    # 3. Feature Scaling: Standardize CPU to 0-1 
-    scaler = MinMaxScaler()
+    # 3. Feature Scaling: Standardize CPU to mean=0, std=1 for better training stability
+    scaler = StandardScaler()
     # Using 'cpu_util_percent' from your dataset preview
     df['cpu_scaled'] = scaler.fit_transform(df[['cpu_util_percent']])
 

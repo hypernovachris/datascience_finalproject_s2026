@@ -117,14 +117,25 @@ class CMTSBackbone(nn.Module):
         t_emb = self.time_mlp(time_steps)
         
         # Initial convolution
-        x = self.init_conv(x)
+        h = self.init_conv(x)
         
         # Pass through ResNet blocks
         for block in self.res_blocks:
-            x = block(x, t_emb)
+            h = block(h, t_emb)
             
-        # Final output
-        return self.final_conv(x)
+        # Raw network output
+        f_theta = self.final_conv(h)
+        
+        # Enforce consistency model boundary condition: 
+        # Output = c_skip(t) * x + c_out(t) * f_theta(x, t)
+        sigma_data = 1
+        c_skip = (sigma_data ** 2) / (time_steps ** 2 + sigma_data ** 2)
+        c_out = (time_steps * sigma_data) / torch.sqrt(time_steps ** 2 + sigma_data ** 2)
+        
+        c_skip = c_skip.view(-1, 1, 1)
+        c_out = c_out.view(-1, 1, 1)
+        
+        return c_skip * x + c_out * f_theta
 
 # ---------------------------------------------------------
 # 4. Consistency Loss Function Helper
